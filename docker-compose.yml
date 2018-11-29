@@ -1,14 +1,20 @@
-tomcat:
+php-server:
   container_name: ${SERVICE_NAME}
   restart: always
-  image: tomcat:8.0.50
+  image: titerote/php:7.2-apache
   net: ${DOCKER_NETWORK_NAME}
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
   privileged: true
   expose:
     - "8080"
+#  ports:
+#    - "8080:80/tcp"
   labels:
     - "PROJECT_NAME=${PROJECT_NAME}"
     - "ENVIRONMENT_NAME=${ENVIRONMENT_NAME}"
-    - "ENVIRONMENT_TYPE=tomcat"
+    - "ENVIRONMENT_TYPE=php"
+  environment:
+    - "PHPINI_memory_limit=256M"
+#  volumes:
+#    - "/root/adop/tite-cartridge-php-environment-template/tmp:/usr/local/etc/php/conf.d/"
