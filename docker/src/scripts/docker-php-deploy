@@ -1,0 +1,23 @@
+#!/bin/bash
+
+SRC=/data/php-deploy/
+DST=/var/www/html/
+#SRC=./php-deploy/
+#DST=./html/
+
+cd $SRC;
+SRC_ABS=$(pwd);
+cd -;
+cd $DST;
+DST_ABS=$(pwd);
+cd -;
+
+for f in $(find $SRC_ABS -type f -name *.tgz); do
+  echo -n "Found $f , Deploying ... ";
+  cd $DST_ABS;
+  rm -rf *;
+  tar xzf $f;
+  rm -f $f;
+  cd -;
+  echo "ok";
+done;
