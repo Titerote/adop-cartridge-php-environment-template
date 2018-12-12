@@ -21,3 +21,8 @@ for f in $(find $SRC_ABS -type f -name *.tgz); do
   cd -;
   echo "ok";
 done;
+
+echo -n "Changing vendor configuration path ";
+sed -i "s/\(\$_SESSION\['library_path'\]=\).*/\\1 \$_SESSION\['application_path'\]\.'\/vendor\/';/g" $DST/conf.php
+echo "ok"
+
