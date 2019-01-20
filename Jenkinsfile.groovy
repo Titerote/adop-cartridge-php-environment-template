@@ -5,8 +5,12 @@ final FULL_BUILD = params.FULL_BUILD
 final HOST_PROVISION = params.HOST_PROVISION
 
 stage('Create Environment') {
-    node {
+    node ("php") {
         def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
+
+        ansibleAdhoc colorized: true,
+          hostPattern: 'localhost',
+          module: 'setup'
 
         withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=pom.artifactId"]) {
             echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
