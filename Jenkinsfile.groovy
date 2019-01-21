@@ -33,7 +33,6 @@ stage('Create Environment as Pipeline') {
           sudoUser: 'jenkins'
       }
   }
-  }
 }
 
 /** **
