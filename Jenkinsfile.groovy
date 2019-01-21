@@ -5,7 +5,7 @@ final FULL_BUILD = params.FULL_BUILD
 final HOST_PROVISION = params.HOST_PROVISION
 
 
-stage('Create Environment') {
+stage('Create Environment as Pipeline') {
   def repoUrl = "http://github.com/Titerote/adop-cartridge-php-environment-template"
   scm {
     git {
@@ -13,6 +13,7 @@ stage('Create Environment') {
       branch('master')
     }
   }
+  checkout scm
   node ("ansible") {
       def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
 
@@ -31,6 +32,7 @@ stage('Create Environment') {
           sudo: true,
           sudoUser: 'jenkins'
       }
+  }
   }
 }
 
