@@ -23,11 +23,11 @@ stage('Create Environment as Pipeline') {
 
         // install galaxy roles
         //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
-        sh "ls -alR ../cmdb"
+        sh "ls -alR ../cmdb/general"
 
         ansiColor('xterm') {
           ansiblePlaybook colorized: true, 
-            credentialsId: 'adop-jenkins-fedora',
+            credentialsId: 'adop-jenkins-master',
 //            limit: "${HOST_PROVISION}",
             installation: 'ansible',
             extras: '-vv',
