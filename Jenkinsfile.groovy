@@ -20,6 +20,8 @@ stage('Create Environment as Pipeline') {
 
       // install galaxy roles
       //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
+      sh 'pwd'
+      sh 'ls -alR .'
 
       ansiblePlaybook colorized: true, 
         credentialsId: 'ssh-jenkins',
