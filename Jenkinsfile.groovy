@@ -26,7 +26,7 @@ stage('Create Environment as Pipeline') {
 
         ansiColor('xterm') {
           ansiblePlaybook colorized: true, 
-            credentialsId: 'ssh-jenkins',
+            credentialsId: 'adop-jenkins-master',
 //            limit: "${HOST_PROVISION}",
             installation: 'ansible',
             extras: '-vvvv',
