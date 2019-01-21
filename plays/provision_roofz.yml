@@ -1,0 +1,8 @@
+---
+
+hosts: localhost
+tasks:
+  - name: Simple test
+    debug:
+      msg: 'Say hello!'
+
