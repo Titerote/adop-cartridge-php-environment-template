@@ -27,7 +27,7 @@ stage('Create Environment as Pipeline') {
         ansiColor('xterm') {
           ansiblePlaybook colorized: true, 
             credentialsId: 'ssh-jenkins',
-            limit: "${HOST_PROVISION}",
+//            limit: "${HOST_PROVISION}",
             installation: 'ansible',
             inventory: '../cmdb/general', 
             playbook: 'plays/provision_roofz.yml'
