@@ -30,12 +30,12 @@ stage('Create Environment as Pipeline') {
             limit: "${HOST_PROVISION}",
             installation: 'ansible',
             inventory: '../cmdb/general', 
-            playbook: 'plays/provision_roofz.yml', 
-        }
-      }
-    }
-  }
-}
+            playbook: 'plays/provision_roofz.yml'
+        } // ansibleColor
+      } // withEnv
+    } // dir adop-php
+  } // node ansible
+} // stage create
 
 /** **
 final GIT_URL = 'https://github.com/ricardozanini/soccer-stats.git'
