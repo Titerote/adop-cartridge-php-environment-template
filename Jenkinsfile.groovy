@@ -10,31 +10,31 @@ stage('Create Environment as Pipeline') {
   def inventoryUrl = "https://YourPalParty@bitbucket.org/palparty-systems/cmdb.git"
 
   node ("ansible") {
-    dir('adop-php') {
-      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
-    }
     dir('cmdb') {
       checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-palparty', url: inventoryUrl]]])
     }
 
-    def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
+    dir('adop-php') {
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
+      def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
 
-    withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=pom.artifactId"]) {
-      echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
+      withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=pom.artifactId"]) {
+        echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
 
-      // install galaxy roles
-      //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
-      sh 'pwd'
-      sh 'ls -alR .'
+        // install galaxy roles
+        //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
 
-      ansiblePlaybook colorized: true, 
-        credentialsId: 'ssh-jenkins',
-        limit: "${HOST_PROVISION}",
-        installation: 'ansible',
-        inventory: 'cmdb/inventory/main.ini', 
-        playbook: 'adop-php/plays/provision_roofz.yml', 
-        sudo: true,
-        sudoUser: 'jenkins'
+        ansiColor('xterm') {
+          ansiblePlaybook colorized: true, 
+            credentialsId: 'ssh-jenkins',
+            limit: "${HOST_PROVISION}",
+            installation: 'ansible',
+            inventory: '../cmdb/inventory/main.ini', 
+            playbook: 'plays/provision_roofz.yml', 
+            sudo: true,
+            sudoUser: 'jenkins'
+        }
+      }
     }
   }
 }
