@@ -29,10 +29,8 @@ stage('Create Environment as Pipeline') {
             credentialsId: 'ssh-jenkins',
             limit: "${HOST_PROVISION}",
             installation: 'ansible',
-            inventory: '../cmdb/inventory/main.ini', 
+            inventory: '../cmdb/general', 
             playbook: 'plays/provision_roofz.yml', 
-            sudo: true,
-            sudoUser: 'jenkins'
         }
       }
     }

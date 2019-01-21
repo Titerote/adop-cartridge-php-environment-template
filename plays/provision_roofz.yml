@@ -1,9 +1,8 @@
 ---
 
-- hosts: localhost
-  connection: local
+- hosts: all
   tasks:
     - name: Simple test
       debug:
-        msg: 'Say hello!'
+        msg: "Say hello! {{infrastructure_specs}}"
 
