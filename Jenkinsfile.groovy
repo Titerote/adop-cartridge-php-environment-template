@@ -26,7 +26,7 @@ stage('Create Environment as Pipeline') {
 
         ansiColor('xterm') {
           ansiblePlaybook colorized: true, 
-            credentialsId: 'adop-jenkins-master',
+            credentialsId: 'adop-jenkins-fedora',
 //            limit: "${HOST_PROVISION}",
             installation: 'ansible',
             extras: '-vvvv',
