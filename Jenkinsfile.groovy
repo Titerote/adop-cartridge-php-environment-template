@@ -4,26 +4,34 @@ final FULL_BUILD = params.FULL_BUILD
 // HOST_PROVISION -> server to run ansible based on provision/inventory.ini
 final HOST_PROVISION = params.HOST_PROVISION
 
+
 stage('Create Environment') {
-    node ("php") {
-        def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
-
-        withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=pom.artifactId"]) {
-            echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
-
-            // install galaxy roles
-            //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
-
-            ansiblePlaybook colorized: true, 
-            credentialsId: 'ssh-jenkins',
-            limit: "${HOST_PROVISION}",
-            installation: 'ansible',
-            inventory: 'provision/inventory.ini', 
-            playbook: 'provision/playbook.yml', 
-            sudo: true,
-            sudoUser: 'jenkins'
-        }
+  def repoUrl = "http://github.com/Titerote/adop-cartridge-php-environment-template"
+  scm {
+    git {
+      url(repoUrl)
+      branch('master')
     }
+  }
+  node ("ansible") {
+      def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
+
+      withEnv(["ARTIFACT_URL=${artifactUrl}", "APP_NAME=pom.artifactId"]) {
+          echo "The URL is ${env.ARTIFACT_URL} and the app name is ${env.APP_NAME}"
+
+          // install galaxy roles
+          //sh "ansible-galaxy install -vvv -r provision/requirements.yml -p provision/roles/"        
+
+          ansiblePlaybook colorized: true, 
+          credentialsId: 'ssh-jenkins',
+          limit: "${HOST_PROVISION}",
+          installation: 'ansible',
+          inventory: 'provision/inventory.ini', 
+          playbook: 'provision/playbook.yml', 
+          sudo: true,
+          sudoUser: 'jenkins'
+      }
+  }
 }
 
 /** **
