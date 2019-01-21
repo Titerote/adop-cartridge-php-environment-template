@@ -1,8 +1,9 @@
 ---
 
-hosts: localhost
-tasks:
-  - name: Simple test
-    debug:
-      msg: 'Say hello!'
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Simple test
+      debug:
+        msg: 'Say hello!'
 

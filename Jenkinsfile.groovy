@@ -10,8 +10,12 @@ stage('Create Environment as Pipeline') {
   def inventoryUrl = "https://YourPalParty@bitbucket.org/palparty-systems/cmdb.git"
 
   node ("ansible") {
-    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
-    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-palparty', url: inventoryUrl]]])
+    dir('adop-php') {
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
+    }
+    dir('cmdb') {
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'bitbucket-palparty', url: inventoryUrl]]])
+    }
 
     def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
 
@@ -27,8 +31,8 @@ stage('Create Environment as Pipeline') {
         credentialsId: 'ssh-jenkins',
         limit: "${HOST_PROVISION}",
         installation: 'ansible',
-        inventory: 'inventory/main.ini', 
-        playbook: 'plays/provision_roofz.yml', 
+        inventory: 'cmdb/inventory/main.ini', 
+        playbook: 'adop-php/plays/provision_roofz.yml', 
         sudo: true,
         sudoUser: 'jenkins'
     }
