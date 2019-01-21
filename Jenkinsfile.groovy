@@ -29,6 +29,7 @@ stage('Create Environment as Pipeline') {
             credentialsId: 'ssh-jenkins',
 //            limit: "${HOST_PROVISION}",
             installation: 'ansible',
+            extras: '-vvvv',
             inventory: '../cmdb/general', 
             playbook: 'plays/provision_roofz.yml'
         } // ansibleColor
