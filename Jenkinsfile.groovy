@@ -7,13 +7,9 @@ final HOST_PROVISION = params.HOST_PROVISION
 
 stage('Create Environment as Pipeline') {
   def repoUrl = "http://github.com/Titerote/adop-cartridge-php-environment-template"
-  scm {
-    git {
-      url(repoUrl)
-      branch('master')
-    }
-  }
-  checkout scm
+
+  checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
+  
   node ("ansible") {
       def artifactUrl = "http://NEXUS_URL/repository/ansible-meetup/repoPath/version/pom.artifactId-version.war"
 
