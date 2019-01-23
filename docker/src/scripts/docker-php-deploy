@@ -1,16 +1,16 @@
 #!/bin/bash
 
-SRC=/data/php-deploy/
-DST=/var/www/html/
+SRC=${PHPDEPLOY_WAR:-/data/php-deploy/}
+DST=${PHPDEPLOY_WEB:-/var/www/html/}
 #SRC=./php-deploy/
 #DST=./html/
 
 cd $SRC;
 SRC_ABS=$(pwd);
-cd -;
+cd - > /dev/null;
 cd $DST;
 DST_ABS=$(pwd);
-cd -;
+cd - > /dev/null;
 
 for f in $(find $SRC_ABS -type f -name *.tgz); do
   echo -n "Found $f , Deploying ... ";
@@ -22,7 +22,22 @@ for f in $(find $SRC_ABS -type f -name *.tgz); do
   echo "ok";
 done;
 
-echo -n "Changing vendor configuration path ";
-sed -i "s/\(\$_SESSION\['library_path'\]=\).*/\\1 \$_SESSION\['application_path'\]\.'\/vendor\/';/g" $DST/conf.php
-echo "ok"
+configs=${!APPRELPATH_*}
+for var in $configs; do
+  config_name=${var#*_}
+  echo -n "Changing configuration ${config_name} ";
+  sed -i "s/\(\$_SESSION\['${config_name,,}'\]=\).*/\\1 \$_SESSION\['application_path'\]\.'${!var}';/g" $DST/conf.php
+  echo ok
+done
 
+configs=${!APPJSON_*}
+for var in $configs; do
+  config_name=${var#*_}
+  echo -n "Changing configuration ${config_name} ";
+  sed -i "s/\(${config_name}:\)\s*\([\'\"]\).*\([\'\"].*\)/\\1 \\2${!var}\\3/g" $DST/conf.php
+  echo 'ok';
+done
+
+#echo -n "Changing vendor configuration path ";
+#sed -i "s/\(\$_SESSION\['library_path'\]=\).*/\\1 \$_SESSION\['application_path'\]\.'\/vendor\/';/g" $DST/conf.php
+#echo "ok"
